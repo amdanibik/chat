@@ -1,7 +1,7 @@
 package users
 
-type Users struct {
+type UserRegister struct {
 	Name     string `form:"name"`
 	Email    string `form:"email"`
-	Password string `form:"password"`
+	Password []byte `form:"password"`
 }
