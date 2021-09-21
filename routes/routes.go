@@ -10,7 +10,7 @@ func New() *echo.Echo {
 	e := echo.New()
 	// user
 	e.POST("/register", controllers.CreateUser) // register user
-	//e.POST("/login", controllers.LoginUser)       // login user
+	e.POST("/login", controllers.LoginUser)     // login user
 	// room
 	//e.GET("/listrooms/:userid", controllers.ListRooms) // list room user with another user
 	// chat
