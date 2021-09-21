@@ -2,29 +2,28 @@ package controllers
 
 import (
 	"app/configs"
-	"app/models/user"
+	"app/models/users"
 	"net/http"
 
-	"github.com/labstack/echo/v4"
-	"golang.org/x/crypto/bcrypt"
+	"github.com/labstack/echo"
 )
 
-func RegisterUser(c echo.Context) error {
-	var userRegister user.UserRegister
-	c.Bind(&userRegister)
-	var userDB user.User
-	password, _ := bcrypt.GenerateFromPassword([]byte(userRegister.Password), 14)
-	userDB.Name = userRegister.Name
-	userDB.Email = userRegister.Email
-	userDB.Password = password
-	err := configs.DB.Create(&userRegister).Error
+func CreateUser(c echo.Context) error {
+	var userCreate users.Users
+	c.Bind(&userCreate)
+	var userDB users.User
+	// password, _ := bcrypt.GenerateFromPassword([]byte(userRegister.Password), 14)
+	userDB.Name = userCreate.Name
+	userDB.Email = userCreate.Email
+	userDB.Password = userCreate.Password
+	err := configs.DB.Create(&userCreate).Error
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, user.UserResponses{
+		return c.JSON(http.StatusInternalServerError, users.UserResponses{
 			false, "failed register user database", nil,
 		})
 	}
 
-	return c.JSON(http.StatusOK, user.UserResponse{
+	return c.JSON(http.StatusOK, users.UserResponse{
 		true, "success register user database", userDB,
 	})
 }
