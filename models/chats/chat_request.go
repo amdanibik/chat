@@ -1,7 +1,8 @@
-package chat
+package chats
 
 type ChatRecord struct {
-	Id      uint   `form:"id"`
-	Sender  string `form:"sender"`
-	Message string `form:"message"`
+	Id       uint   `form:"id"`
+	Sender   string `form:"sender"`
+	Receiver string `form:"receiver"`
+	Message  string `form:"message"`
 }

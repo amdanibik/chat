@@ -5,3 +5,8 @@ type UserRegister struct {
 	Email    string `form:"email"`
 	Password []byte `form:"password"`
 }
+
+type UserChecker struct {
+	Email    string `form:"email"`
+	Password string `form:"password"`
+}

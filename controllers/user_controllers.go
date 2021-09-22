@@ -4,7 +4,6 @@ import (
 	"app/configs"
 	"app/models/users"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo"
 	"golang.org/x/crypto/bcrypt"
@@ -14,7 +13,7 @@ func CreateUser(c echo.Context) error {
 	var userCreate users.UserRegister
 	c.Bind(&userCreate)
 	var userDB users.User
-	password, _ := bcrypt.GenerateFromPassword([]byte(userCreate.Password), 14)
+	password, _ := bcrypt.GenerateFromPassword([]byte(userCreate.Password), bcrypt.MinCost)
 	userDB.Name = userCreate.Name
 	userDB.Email = userCreate.Email
 	userDB.Password = password
@@ -31,21 +30,21 @@ func CreateUser(c echo.Context) error {
 }
 
 func LoginUser(c echo.Context) error {
-	var userCheck users.User
+	var userCheck users.UserChecker
 	c.Bind(&userCheck)
-	hashPass, _ := bcrypt.GenerateFromPassword([]byte(userCheck.Password), 14)
-	err := configs.DB.Find(&userCheck, "email = ? AND password = ?", userCheck.Email, hashPass).Error
-
+	var userDB users.User
+	err := configs.DB.First(&userDB, "email = ? ", userCheck.Email).Error
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, users.UserResponses{
-			false, "failed login user", nil,
+			false, "Failed get data user", nil,
 		})
 	}
-
-	id := userCheck.Id
-	strId := strconv.Itoa(int(id))
-
-	return c.JSON(http.StatusOK, users.UserResponses{
-		true, "success login user with id user " + strId, nil,
+	if checkPass := bcrypt.CompareHashAndPassword(userDB.Password, []byte(userCheck.Password)); checkPass != nil {
+		return c.JSON(http.StatusInternalServerError, users.UserResponses{
+			false, "Invalid Password", nil,
+		})
+	}
+	return c.JSON(http.StatusOK, users.UserResponse{
+		true, "Success get data user", userDB,
 	})
 }

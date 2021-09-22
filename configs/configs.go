@@ -1,6 +1,8 @@
 package configs
 
 import (
+	"app/models/chats"
+	"app/models/rooms"
 	"app/models/users"
 	"fmt"
 
@@ -38,4 +40,6 @@ func InitDB() {
 
 func AutoMigrate() {
 	DB.AutoMigrate(&users.User{})
+	DB.AutoMigrate(&rooms.Room{})
+	DB.AutoMigrate(&chats.Chat{})
 }

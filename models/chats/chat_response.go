@@ -1,4 +1,4 @@
-package chat
+package chats
 
 type ChatResponses struct {
 	Status  bool   `json:"status"`

@@ -1,4 +1,4 @@
-package room
+package rooms
 
 type RoomRegister struct {
 	Id       uint   `form:"id"`
